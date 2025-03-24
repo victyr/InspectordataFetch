@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KoboToolbox Data Fetch</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #loading {
+            display: none;
+            font-weight: bold;
+            color: blue;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        async function fetchData() {
+            const apiUrl = "https://kf.kobotoolbox.org/api/v2/assets/aJYpq5fw37anWLVHAh5XFY/export-settings/esbMKerg64MbouYqkBFb2FT/data/";
+            const apiKey = "a815eaf7471d3e6a3bc4f32c5871d2e29e771bb6";
+            const loadingIndicator = document.getElementById("loading");
+            const errorMessage = document.getElementById("error");
+            
+            loadingIndicator.style.display = "block";
+            errorMessage.textContent = "";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        "Authorization": "Token " + apiKey,
+                        "Content-Type": "application/json"
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data. Status: " + response.status);
+                }
+                
+                const data = await response.json();
+                displayData(data.results);
+            } catch (error) {
+                errorMessage.textContent = "Error: " + error.message;
+                console.error("Error fetching data:", error);
+            } finally {
+                loadingIndicator.style.display = "none";
+            }
+        }
+
+        function displayData(results) {
+            const table = document.getElementById("dataTable");
+            table.innerHTML = "<tr><th>ID</th><th>Field1</th><th>Field2</th></tr>";
+            
+            if (results.length === 0) {
+                table.innerHTML += "<tr><td colspan='3'>No data available</td></tr>";
+                return;
+            }
+            
+            results.forEach(item => {
+                let row = table.insertRow();
+                row.insertCell(0).textContent = item._id;
+                row.insertCell(1).textContent = item["your_field_name1"] || "N/A";
+                row.insertCell(2).textContent = item["your_field_name2"] || "N/A";
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>KoboToolbox Data</h1>
+    <button onclick="fetchData()">Fetch Data</button>
+    <p id="loading">Loading data...</p>
+    <p id="error" class="error"></p>
+    <table id="dataTable">
+        <tr>
+            <th>ID</th>
+            <th>Field1</th>
+            <th>Field2</th>
+        </tr>
+    </table>
+</body>
+</html>
