@@ -30,7 +30,7 @@
     </style>
     <script>
         async function fetchData() {
-            const apiUrl = "https://kf.kobotoolbox.org/api/v2/assets/aJYpq5fw37anWLVHAh5XFY/export-settings/esbMKerg64MbouYqkBFb2FT/data/";
+            const apiUrl = "https://kf.kobotoolbox.org/#/forms/aJYpq5fw37/data/";
             const apiKey = "a815eaf7471d3e6a3bc4f32c5871d2e29e771bb6";
             const loadingIndicator = document.getElementById("loading");
             const errorMessage = document.getElementById("error");
